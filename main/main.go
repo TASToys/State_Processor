@@ -19,9 +19,11 @@ const(
 
 
 func main() {
+	argParse()
+}
 
 
-
+func argParse(){
 	args := os.Args
 
 	switch strings.ToLower(args[1]) {
@@ -30,7 +32,6 @@ func main() {
 	case processorArgumentString:
 		processor(args[2])
 	}
-	
 }
 
 func controller(){
