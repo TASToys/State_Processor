@@ -6,9 +6,6 @@ import(
 	"os"
 	"fmt"
 	"strings"
-	"time"
-	"strconv"
-
 )
 
 const(
@@ -16,16 +13,8 @@ const(
 )
 
 //TestNetCode sends and prints 1000 messages to an arbitrarily created server
-func TestNetCode(){
-	done1 := make(chan string, 1024)
-	address := ArbitraryHost(done1)
-	fmt.Printf("inbound IP: %s \n", address)
-	for i := 0; i < 1000; i++{
-		go SendMessage("This is message " + strconv.Itoa(i), address)
-		fmt.Printf("Received :%s\n", <-done1)
-		time.Sleep(time.Millisecond * 100)	
-	}
-}
+
+
 
 //SendMessage takes in a message and address string and sends that message to that address. 
 //this code is designed to act as part of a simple 2 piece send and receive 
@@ -57,7 +46,8 @@ func PollMessage(message string, address string) (response string) {
 
 //ArbitraryHost hosts an arbitrarily located tcp server. All data received is sent to the provided channel.
 //The returned string is the string that the host is listening to in the form of xxx.xxx.xxx.xxx:port
-func ArbitraryHost(output chan string) (address string){
+func ArbitraryHost() (address string, output chan string){
+	output = make(chan string, 1024) 
 	l, err := net.Listen("tcp", getOutboundIP().String() +":0")
 
 	if err != nil {
@@ -66,7 +56,7 @@ func ArbitraryHost(output chan string) (address string){
 	}
 	address = l.Addr().String()
 	go arbitraryHostListen(output, l)
-	return address
+	return address, output
 }
 
 func arbitraryHostListen(output chan string, l net.Listener ){

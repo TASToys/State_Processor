@@ -1,13 +1,12 @@
 package main
 
 import (
-
 	"fmt"
-
 	"os"
-	
+	"State_processor/test"
 	"State_processor/netcode"
 	"strings"
+
 )
 
 const(
@@ -19,7 +18,7 @@ const(
 
 
 func main() {
-	argParse()
+	test.NetCode(100)
 }
 
 
@@ -34,6 +33,8 @@ func argParse(){
 	}
 }
 
+
+
 func controller(){
 
 
@@ -43,8 +44,7 @@ func controller(){
 
 func processor(controllerAddress string){
 	//create and send to the controller the receiver for the 
-	inputChannel := make(chan string, 1024) 
-	commandAddress := netcode.ArbitraryHost(inputChannel)
+	commandAddress, inputChannel := netcode.ArbitraryHost()
 	commandAddressString := "newProcessor" + nameTextDelimiter + commandAddress
 	netcode.SendMessage(commandAddressString, controllerAddress)
 	var commandString string
