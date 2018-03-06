@@ -3,7 +3,7 @@ package main
 import (
 	"sync"
 	"fmt"
-
+	"math/rand"
 	//"os"
 	
 	"State_processor/netcode"
@@ -27,8 +27,10 @@ func main() {
 func controller(){
 	var l sync.Mutex
 	var sum = 0
-	var num = 1000000
+	var num = rand.Int()%rand.Int()%rand.Int()%100000
 	var threads = 0
+
+	fmt.Printf("mux:%d\nstart:%d", num,(num*num ))
 
 	for i := 0; i < num; i++{
 		l.Lock()
