@@ -1,10 +1,10 @@
 package main
 
 import (
-	"sync"
+
 	"fmt"
-	"math/rand"
-	//"os"
+
+	"os"
 	
 	"State_processor/netcode"
 	"strings"
@@ -13,51 +13,32 @@ import (
 const(
 	differentInfoDelimiter string = "¡"
 	nameTextDelimiter string = ":"
+	controllerArgumentString = "controller"
+	processorArgumentString = "processor"
 )
 
 
 func main() {
 
-	controller()
-	//go processor("1.1.1.1:80")
-	//for {}
+
+
+	args := os.Args
+
+	switch strings.ToLower(args[1]) {
+	case controllerArgumentString:
+		controller()
+	case processorArgumentString:
+		processor(args[2])
+	}
 	
 }
 
 func controller(){
-	var l sync.Mutex
-	var sum = 0
-	var num = rand.Int()%rand.Int()%rand.Int()%100000
-	var threads = 0
 
-	fmt.Printf("mux:%d\nstart:%d", num,(num*num ))
-
-	for i := 0; i < num; i++{
-		l.Lock()
-		threads = threads+1
-		l.Unlock()
-		go add(&l,&sum,num, &threads)
-
-	}
-	
-	for threads > 0{
-	}
-	fmt.Printf("total:%d", sum)
 
 }
 
-func add(l *sync.Mutex, sum *int, num int, threads *int){
-	var s = 0
-	for i := 0; i < num; i++{
-		s++
-	}
-	l.Lock()
-		*sum = *sum + s
 
-	*threads = *threads-1
-	l.Unlock()
-
-}
 
 func processor(controllerAddress string){
 	//create and send to the controller the receiver for the 
