@@ -69,15 +69,16 @@ func processor(controllerAddress string){
 		commandString = <- inputChannel
 		commands = textSplitter(commandString, differentInfoDelimiter, nameTextDelimiter)
 
-		switch strings.ToLower(commands[0]) {
-		case "newjob"   : newJob(commands[1:])
-		case "runjob"   : runJob(commands[1:])
-		case "removejob": removeJob(commands[1:])
-		case "listjobs" : listJobs(commands[1:])
-		case "ping"     :
-			netcode.SendMessage("pong", commands[1]) 
-		default:
-		
+		for i:=0; i < len(commands); i+=2{
+			switch strings.ToLower(commands[i]) {
+				case "newjob"   : newJob(commands[i+1])
+				case "runjob"   : runJob(commands[i+1])
+				case "removejob": removeJob(commands[i+1])
+				case "listjobs" : listJobs(commands[i+1])
+				case "ping"     :
+					netcode.SendMessage("pong", commands[i+1]) 
+				default:
+			}
 		
 		}
 	}
@@ -95,22 +96,22 @@ func textSplitter(text, primaryDelim, secondairyDelim string) []string{
 }
 
 
-func newJob(input []string){
+func newJob(input string){
 
 }
 
-func runJob(input []string){
+func runJob(input string){
 	var fido fidomsg;
-	json.Unmarshal([]byte(input[1]), fido);
-	
+	json.Unmarshal([]byte(input), fido);
 
 
-}
-
-func removeJob(input []string){
 
 }
 
-func listJobs(input []string){
+func removeJob(input string){
+
+}
+
+func listJobs(input string){
 
 }
