@@ -19,11 +19,11 @@ const(
 	controllerArgumentString = "controller"
 	processorArgumentString = "processor"
 )
- 
+  
 
 func main() {
 	test.NetCode(100)
-}
+} 
 
 
 type fidomsg struct {
