@@ -10,7 +10,7 @@ import (
 )
 
 //test
-
+//another test
 
 
 const(
@@ -34,7 +34,7 @@ type fidomsg struct {
 	SourceUser		string	`json:"source_user"`
 	TastoysUser		string	`json:"tastoys_user"`
     Timestamp		string	`json:"timestamp"`
-    Data           struct { //I think that this needs to be a string
+    Data           struct { //I think that this needs to be a string 
     } `json:"data"`
 }
 
