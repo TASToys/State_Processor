@@ -6,8 +6,12 @@ import (
 	"State_processor/test"
 	"State_processor/netcode"
 	"strings"
-
+	"encoding/json"
 )
+
+
+
+
 
 const(
 	differentInfoDelimiter string = "¡"
@@ -21,6 +25,18 @@ func main() {
 	test.NetCode(100)
 }
 
+
+type fidomsg struct {
+    PluginID		int		`json:"plugin_id"`
+    PluginType		int		`json:"plugin_type"`
+    SourcePlatform	string	`json:"source_platform"`
+	SourceChannel	string	`json:"source_channel"`
+	SourceUser		string	`json:"source_user"`
+	TastoysUser		string	`json:"tastoys_user"`
+    Timestamp		string	`json:"timestamp"`
+    Data           struct { //I think that this needs to be a string
+    } `json:"data"`
+}
 
 func argParse(){
 	args := os.Args
@@ -54,10 +70,10 @@ func processor(controllerAddress string){
 		commands = textSplitter(commandString, differentInfoDelimiter, nameTextDelimiter)
 
 		switch strings.ToLower(commands[0]) {
-		case "newjob"   :
-		case "runjob"   :
-		case "removejob":
-		case "listjobs" :
+		case "newjob"   : newJob(commands[1:])
+		case "runjob"   : runJob(commands[1:])
+		case "removejob": removeJob(commands[1:])
+		case "listjobs" : listJobs(commands[1:])
 		case "ping"     :
 			netcode.SendMessage("pong", commands[1]) 
 		default:
@@ -79,3 +95,22 @@ func textSplitter(text, primaryDelim, secondairyDelim string) []string{
 }
 
 
+func newJob(input []string){
+
+}
+
+func runJob(input []string){
+	var fido fidomsg;
+	json.Unmarshal([]byte(input[1]), fido);
+	
+
+
+}
+
+func removeJob(input []string){
+
+}
+
+func listJobs(input []string){
+
+}
