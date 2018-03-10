@@ -20,7 +20,7 @@ const (
 )
 
 func main() {
-	test.NetCodeTest(100)
+	//test.NetCodeTest(100)
 	test.LuaGoTest()
 }
 
