@@ -28,13 +28,16 @@ func NetCodeTest(in int){
 func LuaGoTest() {
 	//fmt.Print("Hello World")
 
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	files, err := ioutil.ReadDir("./")
     if err != nil {
-		os.Exit(1)
+        log.Fatal(err)
+    }
+
+    for _, f := range files {
+            fmt.Println(f.Name())
 	}
-	fmt.Println(dir)
 	
-	fmt.Println(string(os.Args[0]))
+	fmt.Print("\n\n\n\n")
 	dat, err := ioutil.ReadFile("\\test\\luaCode.lua")
 	check(err)
 	//fmt.Print(string(dat))
