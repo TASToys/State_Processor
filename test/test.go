@@ -26,7 +26,7 @@ func NetCodeTest(in int){
 func LuaGoTest() {
 	//fmt.Print("Hello World")
 
-	dat, err := ioutil.ReadFile("/")
+	dat, err := ioutil.ReadFile("/test/luaCode.lua")
 	check(err)
 	//fmt.Print(string(dat))
 	var runString = string(dat)
