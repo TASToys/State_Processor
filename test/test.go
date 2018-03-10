@@ -4,12 +4,14 @@ package test
 import(
 	"State_processor/netcode"
 	"fmt"
-
+	"github.com/yuin/gopher-lua"
 	"strconv"
+	"io/ioutil"
+
 )
 
 //NetCode tests netcode
-func NetCode(in int){
+func NetCodeTest(in int){
 
 	address, done1 := netcode.ArbitraryHost()
 	fmt.Printf("inbound IP: %s \n", address)
@@ -18,4 +20,25 @@ func NetCode(in int){
 		fmt.Printf("Received :%s\n", <-done1)
 	}
 	
+}
+
+func LuaGoTest() {
+	//fmt.Print("Hello World")
+
+	dat, err := ioutil.ReadFile("c:\\Users\\deef\\Desktop\\luaCode.txt")
+	check(err)
+	//fmt.Print(string(dat))
+	var runString = string(dat)
+
+	L := lua.NewState()
+	defer L.Close()
+	if err := L.DoString(runString); err != nil {
+		panic(err)
+	}
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
