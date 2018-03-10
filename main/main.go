@@ -20,8 +20,8 @@ const (
 )
 
 func main() {
-	test.NetCode(100)
-	test.LuaCodeTest()
+	test.NetCodeTest(100)
+	test.LuaGoTest()
 }
 
 type fidomsg struct {
