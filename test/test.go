@@ -7,9 +7,10 @@ import(
 	"github.com/yuin/gopher-lua"
 	"strconv"
 	"io/ioutil"
-	"os"
-	"path/filepath"
+//	"os"
+//	"path/filepath"
 
+	"log"
 )
 
 //NetCodeTest tests the simple netcode implementation
