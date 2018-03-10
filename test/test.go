@@ -10,7 +10,7 @@ import(
 
 )
 
-//NetCodeTest tests netcode
+//NetCodeTest tests the simple netcode implementation
 func NetCodeTest(in int){
 
 	address, done1 := netcode.ArbitraryHost()
