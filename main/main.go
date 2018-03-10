@@ -21,6 +21,7 @@ const (
 
 func main() {
 	test.NetCode(100)
+	test.LuaCodeTest()
 }
 
 type fidomsg struct {
