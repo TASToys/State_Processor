@@ -39,7 +39,7 @@ func LuaGoTest() {
 	}
 	
 	fmt.Print("\n\n\n\n")
-	dat, err := ioutil.ReadFile("\\test\\luaCode.lua")
+	dat, err := ioutil.ReadFile("./test/luaCode.lua")
 	check(err)
 	//fmt.Print(string(dat))
 	var runString = string(dat)
