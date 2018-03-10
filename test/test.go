@@ -10,7 +10,7 @@ import(
 
 )
 
-//NetCode tests netcode
+//NetCodeTest tests netcode
 func NetCodeTest(in int){
 
 	address, done1 := netcode.ArbitraryHost()
@@ -22,6 +22,7 @@ func NetCodeTest(in int){
 	
 }
 
+//LuaGoTest tests the lua go implementation
 func LuaGoTest() {
 	//fmt.Print("Hello World")
 
