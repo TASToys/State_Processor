@@ -29,7 +29,7 @@ func NetCodeTest(in int){
 func LuaGoTest() {
 	//fmt.Print("Hello World")
 
-	files, err := ioutil.ReadDir("./")
+	files, err := ioutil.ReadDir("./test")
     if err != nil {
         log.Fatal(err)
     }
