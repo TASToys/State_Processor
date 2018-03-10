@@ -34,7 +34,7 @@ func LuaGoTest() {
 	}
 	fmt.Println(dir)
 	
-	fmt.Printf("", )
+	fmt.Println(string(os.Args[0]))
 	dat, err := ioutil.ReadFile("/test/luaCode.lua")
 	check(err)
 	//fmt.Print(string(dat))
