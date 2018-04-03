@@ -26,7 +26,18 @@ function isPrime (input)
 end
 
 
+local function fib(n)
+    if n < 2 then return n end
+    return fib(n - 2) + fib(n - 1)
+end
+
+--console.log(fib(35));
+
+
+
 
 print("Hello World!")
 print("sum: " , testval ,  sum(testval))
 print("Prime: ", testval , isPrime(testval))
+
+print(fib(20))
