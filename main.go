@@ -19,9 +19,12 @@ const (
 	processorArgumentString         = "processor"
 )
 
+var programs map[string]string
+
 func main() {
 	//test.NetCodeTest(100)
-	test.LuaGoTest()
+	//test.LuaGoTest()
+	test.AllTests()
 }
 
 type fidomsg struct {
@@ -53,6 +56,7 @@ func controller() {
 
 func processor(controllerAddress string) {
 	//create and send to the controller the receiver for the
+
 	commandAddress, inputChannel := netcode.ArbitraryHost()
 	commandAddressString := "newProcessor" + nameTextDelimiter + commandAddress
 	netcode.SendMessage(commandAddressString, controllerAddress)

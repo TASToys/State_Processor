@@ -1,5 +1,8 @@
 package test
 
+//This file is the file used for testing and learning purposes. Eventually it will become testing only
+//However, until such a time as I (deef0000dragon1) am comfortable with the language, I will continue
+//to use it as a playground of sorts to test different aspects of golang and the state_processor
 
 import(
 	"State_processor/netcode"
@@ -12,6 +15,33 @@ import(
 
 	"log"
 )
+
+//AllTests runs all tests in test.go
+func AllTests(){
+	fmt.Println("\n\n*****************STARTING TESTS*****************")
+	NetCodeTest(3)
+	fmt.Println()
+	LuaGoTest()
+	fmt.Println()
+	GlobalMapTest()
+	fmt.Print("******************ENDING TESTS******************\n\n\n")
+}
+
+	var globalMap map[string]string
+
+//GlobalMapTest tests the global map.
+func GlobalMapTest(){
+	globalMap = make(map[string]string)
+	globalMap["test1"] = "test1Value"
+	globalMap["test2"] = "test2Value"
+	globalMap["test3"] = "test3Value"
+	fmt.Printf("%v\n", globalMap)
+	globalMap["test1"] = "altered"
+	globalMap["test2"] = "altered"
+	globalMap["test3"] = "altered"
+	fmt.Printf("%v\n", globalMap)
+
+}
 
 //NetCodeTest tests the simple netcode implementation
 func NetCodeTest(in int){
@@ -37,8 +67,6 @@ func LuaGoTest() {
     for _, f := range files {
             fmt.Println(f.Name())
 	}
-	
-	fmt.Print("\n\n\n\n")
 	dat, err := ioutil.ReadFile("./test/luaCode.lua")
 	check(err)
 	//fmt.Print(string(dat))
