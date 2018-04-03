@@ -31,10 +31,10 @@ func AllTests() {
 	fmt.Print("******************ENDING TESTS******************\n\n\n")
 }
 
-var globalMap map[string]string
+	var globalMap map[string]string
 
 //GlobalMapTest tests the global map.
-func GlobalMapTest() {
+func GlobalMapTest(){
 	globalMap = make(map[string]string)
 	globalMap["test1"] = "test1Value"
 	globalMap["test2"] = "test2Value"
