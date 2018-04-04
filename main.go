@@ -85,6 +85,7 @@ func processor(controllerAddress string) {
 	}
 }
 
+//splits the input text into a 
 func textSplitter(text, primaryDelim, secondairyDelim string) []string {
 
 	pairs := strings.Split(text, primaryDelim)
