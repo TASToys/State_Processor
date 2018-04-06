@@ -40,4 +40,4 @@ print("Hello World!")
 print("sum: " , testval ,  sum(testval))
 print("Prime: ", testval , isPrime(testval))
 
-print(fib(20))
+print("Fib 20: ", fib(20))
