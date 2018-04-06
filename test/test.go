@@ -5,14 +5,14 @@ package test
 //to use it as a playground of sorts to test different aspects of golang and the state_processor
 
 import (
+	"State_processor/LanguagesAndHelpers"
 	"State_processor/netcode"
 	"fmt"
+	"github.com/yuin/gopher-lua"
 	"io/ioutil"
 	"strconv"
-
-	"github.com/yuin/gopher-lua"
-
-	"log"
+	"sync"
+//	"sync/atomic"
 )
 
 //AllTests runs all tests in test.go
@@ -28,13 +28,15 @@ func AllTests() {
 	LuaLimitedEnvironmentPassedInStringTest()
 	fmt.Println("\n***GLOBAL MAP TESTS***")
 	GlobalMapTest()
+	fmt.Println("\n***JSON PARSE TESTS***")
+	JSONParseTest()
 	fmt.Print("******************ENDING TESTS******************\n\n\n")
 }
 
-	var globalMap map[string]string
+var globalMap map[string]string
 
 //GlobalMapTest tests the global map.
-func GlobalMapTest(){
+func GlobalMapTest() {
 	globalMap = make(map[string]string)
 	globalMap["test1"] = "test1Value"
 	globalMap["test2"] = "test2Value"
@@ -44,6 +46,36 @@ func GlobalMapTest(){
 	globalMap["test2"] = "altered"
 	globalMap["test3"] = "altered"
 	fmt.Printf("%v\n", globalMap)
+
+}
+
+var sum = 0
+var done = 0
+
+//MutexTest tests mutexes
+func mutexTest() {
+	var mutex = &sync.Mutex{}
+	num := 10000
+	for i := 0; i < num; i++ {
+
+		go func() {
+			total := 0
+			for i := 0; i < num; i++ {
+				total++
+			}
+			mutex.Lock()
+				sum+=total
+				done++
+			mutex.Unlock()
+			//fmt.Print("done")
+		}()
+
+	}
+	
+	for done < num{
+
+	}
+	fmt.Printf("Total %d\n", sum)
 
 }
 
@@ -59,20 +91,40 @@ func NetCodeTest(in int) {
 
 }
 
+//error checker that pacnis on an error
+func check(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+//goal: write json parsing code that can pull out specific data from arbitrary json.
+
+//GetJSONPieceTest tests getting a part of arbitrary json
+func GetJSONPieceTest() {
+	data, err := ioutil.ReadFile("./test/example.json")
+	check(err)
+	loc := "1:owner:login"
+	LanguagesAndHelpers.GetJSONPiece(string(data), loc) //should return "deef0000dragon1"
+}
+
 //LuaGoTest tests the lua go implementation
 func LuaGoTest() {
 	//fmt.Print("Hello World")
 
 	files, err := ioutil.ReadDir("./test")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf(err.Error())
+		return
 	}
 
 	for _, f := range files {
 		fmt.Println(f.Name())
 	}
 	dat, err := ioutil.ReadFile("./test/luaCode.lua")
-	check(err)
+	if err != nil {
+		panic(err)
+	}
 	//fmt.Print(string(dat))
 	var runString = string(dat)
 
@@ -84,54 +136,18 @@ func LuaGoTest() {
 	}
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 //LuaLimitedEnvironmentPassedInStringTest is designed to test the limiting of the lua environment.
 func LuaLimitedEnvironmentPassedInStringTest() {
 	dat, err := ioutil.ReadFile("./test/luaCode.lua")
-	check(err)
-	//fmt.Print(string(dat))
+	if err != nil {
+		panic(err)
+	} //fmt.Print(string(dat))
 	var runString = string(dat)
-	TrueRunCode(runString)
+	LanguagesAndHelpers.RunLuaCode(runString)
 
 }
 
-/*tested but failing code. Kept for posterity shold I come back to examine how to get the out of lua sandboxing working.
-func doScriptInSandbox(L *lua.LState, script string) error {
-	io := L.GetGlobal("io").(*lua.LTable)
-	orgopen := io.RawGetH(lua.LString("open"))
-	defer io.RawSetH(lua.LString("open"), orgopen)
-	sandBoxFunc := L.NewFunction(func(L *lua.LState) int {
-		L.RaiseError("can not call in a sandbox environment.")
-		return 0
-	})
-	io.RawSetH(lua.LString("open"), sandBoxFunc)
-	err := L.DoString(script)
-	return err
-}
-
-func runcode() {
-	L := lua.NewState()
-
-	fmt.Printf("L State:%v\n\n\n", ((L.Env).Len()))
-	script := `
-      local fp = assert(io.open("test.txt"))
-      fp:close()
-    `
-	if err := doScriptInSandbox(L, script); err != nil {
-		fmt.Println(err.Error())
-	}
-	if err := L.DoString(script); err != nil {
-		fmt.Println(err.Error())
-	}
-}
-*/
-
-//LuaLimitedEnvironmentTest tests basic lua limited environment code using print etc. 
+//LuaLimitedEnvironmentTest tests basic lua limited environment code using print etc.
 func LuaLimitedEnvironmentTest() {
 	L := lua.NewState()
 	script := `print("Hello World!") --test working print
@@ -161,66 +177,23 @@ func LuaLimitedEnvironmentTest() {
 
 	if err := L.DoString(script); err != nil {
 		fmt.Println(err.Error())
-	} else {
-		fmt.Print("Passed the test\n")
 	}
-
 }
 
-//TrueRunCode is designed to take in code into inputCode and run it in the predetermined sandboxed format.
-//inputCode string is the code to be run by the function.
-func TrueRunCode(inputCode string) {
-	start := `
-	local env = {
-		ipairs = ipairs,
-		next = next,
-		pairs = pairs,
-		pcall = pcall,
-		tonumber = tonumber,
-		tostring = tostring,
-		type = type,
-		unpack = unpack,,
-		print = print,
-		string = { byte = string.byte, char = string.char, find = string.find, 
-			format = string.format, gmatch = string.gmatch, gsub = string.gsub, 
-			len = string.len, lower = string.lower, match = string.match, 
-			rep = string.rep, reverse = string.reverse, sub = string.sub, 
-			upper = string.upper },
-		table = { insert = table.insert, maxn = table.maxn, remove = table.remove, 
-			sort = table.sort },
-		math = { abs = math.abs, acos = math.acos, asin = math.asin, 
-			atan = math.atan, atan2 = math.atan2, ceil = math.ceil, cos = math.cos, 
-			cosh = math.cosh, deg = math.deg, exp = math.exp, floor = math.floor, 
-			fmod = math.fmod, frexp = math.frexp, huge = math.huge, 
-			ldexp = math.ldexp, log = math.log, log10 = math.log10, max = math.max, 
-			min = math.min, modf = math.modf, pi = math.pi, pow = math.pow, 
-			rad = math.rad, random = math.random, sin = math.sin, sinh = math.sinh, 
-			sqrt = math.sqrt, tan = math.tan, tanh = math.tanh },
-		os = { clock = os.clock, difftime = os.difftime, time = os.time },
-	}
+//JSONParseTest tests to make sure that the JSON parser is parsing the input JSON correctally.
+func JSONParseTest() {
 
-	--may not add codoutines. 
-	--coroutine = { create = coroutine.create, resume = coroutine.resume, 
-	--	running = coroutine.running, status = coroutine.status, 
-	--	wrap = coroutine.wrap },
+	data, err := ioutil.ReadFile("./test/example.json")
+	if err != nil {
+		panic(err)
+	} //fmt.Print(string(dat))
+	var runString = string(data)
 
-	local function run(untrusted_code) --run function
-  	if untrusted_code:byte(1) == 27 then return nil, "binary bytecode prohibited" end
-  	local untrusted_function, message = loadstring(untrusted_code)
-  	if not untrusted_function then return nil, message end
-  	setfenv(untrusted_function, env) --set the environment
-  	return pcall(untrusted_function) --run the code using the set environment
-	end
-	
-	run [[`
+	searchString1 := "stuff:data:1:owner:id"
+	searchString2 := "stuff:data:0:name"
 
-	//It would be wise to confirm against http://lua-users.org/wiki/SandBoxes what to add and remove. 
-	runString := start + inputCode + "]]"
-	L := lua.NewState()
-	if err := L.DoString(runString); err != nil {
-		fmt.Println(err.Error())
-	} else {
-		fmt.Print("Passed the test\n")
-	}
+	out1 := LanguagesAndHelpers.GetJSONPiece(runString, searchString1)
+	out2 := LanguagesAndHelpers.GetJSONPiece(runString, searchString2)
 
+	fmt.Printf("Should Be \n3053654 CE2801-Embedded-Systems-1\nIS\n%s %s\n", out1, out2)
 }
