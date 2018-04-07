@@ -3,7 +3,7 @@ package main
 import (
 	"State_processor/LanguagesAndHelpers"
 	"State_processor/netcode"
-	//"State_processor/test"
+	"State_processor/test"
 	"fmt"
 	"os"
 	"strings"
@@ -18,6 +18,9 @@ const (
 	nameTextDelimiter        string = "‽"
 	controllerArgumentString        = "controller"
 	processorArgumentString         = "processor"
+	testAllArgumentString 			= "testAll"
+	testCoreArgumentString 			= "test"
+	
 )
 
 //stores a list of all programs. Stored in the format TastoysUser-PluginId
@@ -52,6 +55,10 @@ func argParse() {
 		controller()
 	case processorArgumentString:
 		processor(args[2])
+	case testAllArgumentString:
+		test.AllTests()
+	case testCoreArgumentString:
+		test.CoreTests()
 	}
 }
 
