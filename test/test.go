@@ -17,7 +17,7 @@ import (
 
 //AllTests runs all tests in test.go
 func AllTests() {
-	fmt.Println("\n\n*****************STARTING TESTS*****************")
+	fmt.Println("\n\n*****************STARTING SIMPLE TESTS*****************")
 	fmt.Println("\n***NETCODE TESTS***")
 	NetCodeTest(3)
 	fmt.Println("\n***LUA GO TESTS***")
@@ -30,7 +30,19 @@ func AllTests() {
 	GlobalMapTest()
 	fmt.Println("\n***JSON PARSE TESTS***")
 	JSONParseTest()
-	fmt.Print("******************ENDING TESTS******************\n\n\n")
+	fmt.Print("******************ENDING SIMPLE TESTS******************\n\n\n")
+	fmt.Print("******************STARTING CORE TESTS******************")
+	fmt.Println("The following tests and actions are the initialization and running of a tastoys State_processor component")
+	fmt.Printf("Included in the test are the following\n\n")
+	fmt.Println("Starting of State_processor controller")
+	fmt.Println("Starting of State_processor processor")
+	fmt.Println("Routing a LUA Job by controller")
+	fmt.Println("Loading a LUA Job by controller to processor")
+	fmt.Println("adding a LUA Job by Processor")
+	fmt.Println("Running a LUA Job by Processor")
+
+
+	fmt.Print("******************ENDING CORE TESTS******************\n\n\n")
 }
 
 var globalMap map[string]string
@@ -48,6 +60,8 @@ func GlobalMapTest() {
 	fmt.Printf("%v\n", globalMap)
 
 }
+
+
 
 var sum = 0
 var done = 0
