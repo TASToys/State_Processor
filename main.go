@@ -33,7 +33,24 @@ var languageMutex = &sync.Mutex{}
 func main() {
 	//test.NetCodeTest(100)
 	//test.LuaGoTest()
-	argParse()
+	//argParse()
+	CoreTests()
+}
+
+//CoreTests runs all core tests as necessary for core State_Processor functionality
+//TODO - Take Tests and plan out the order of implementation and route to testing. 
+func CoreTests(){
+	fmt.Println("\n\n******************STARTING CORE TESTS******************")
+	fmt.Println("The following tests and actions are the initialization") 
+	fmt.Println("and running of a tastoys State_processor component.")
+	fmt.Printf("Included in the test are the following\n\n")
+	fmt.Println("Starting of State_processor controller")
+	fmt.Println("Starting of State_processor processor")
+	fmt.Println("Loading a LUA Job by controller")
+	fmt.Println("Routing a LUA Job from controller to processor")
+	fmt.Println("adding a LUA Job by Processor")
+	fmt.Println("Running a LUA Job by Processor")
+	fmt.Print("******************ENDING CORE TESTS******************\n\n\n")
 }
 
 type fidomsg struct {
