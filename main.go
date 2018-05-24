@@ -20,6 +20,7 @@ const (
 	processorArgumentString         = "processor"
 	testAllArgumentString 			= "testAll"
 	testCoreArgumentString 			= "test"
+	ContAndProcArgumentString		= "both"
 	
 )
 
@@ -50,26 +51,84 @@ type fidomsg struct {
 func argParse() {
 	args := os.Args
 
+	var(
+		ControllerAddress string
+		ControllerRunning *bool
+		ProcessorAddress string
+		ProcessorRunning *bool
+	)
+
+	startFalse := false;
+
+	ProcessorRunning = &startFalse
+	ControllerRunning = &startFalse
+	
+
 	switch strings.ToLower(args[1]) {
 	case controllerArgumentString:
-		controller()
+		ControllerAddress, ControllerRunning = InstantiateController()
 	case processorArgumentString:
-		processor(args[2])
+		ProcessorAddress, ProcessorRunning = InstantiateProcessor(args[2])
 	case testAllArgumentString:
 		test.AllTests()
 	case testCoreArgumentString:
 		test.CoreTests()
+	case ContAndProcArgumentString:
+		ControllerAddress, ControllerRunning = InstantiateController()
+		ProcessorAddress, ProcessorRunning = InstantiateProcessor(ControllerAddress)
 	}
+
+	fmt.Printf("Controller Address: %s\n",ControllerAddress)
+	fmt.Printf("Processor Address: %s\n",ProcessorAddress)
+	
+
+	for (*ControllerRunning == true) {
+		//wait loop for waiting for the controller to stop running. This should not happen but can
+		//If a shutdown command is given for example,
+	}
+
+	for (*ProcessorRunning == true) {
+		//wait loop for waiting for the controller to stop running. This should not happen but can
+		//If a shutdown command is given for example,
+	}
+
+
 }
 
-func controller() {
+//InstantiateController is the function that initiates the controller function. InstantiateController listens on the first returned post for any input.
+//when the controller receives a message, it determines if the 
+func InstantiateController() ( string, *bool) {
+	StillRunning := true;
+	commandAddress, inputChannel := netcode.ArbitraryHost()  
+
+	go controller(inputChannel, &StillRunning)
+	return commandAddress, &StillRunning
+}
+
+func controller(inputChannel chan string, StillRunning *bool){
 
 }
 
-func processor(controllerAddress string) {
+
+//InstantiateProcessor receives a string containing the address of the controller that it connects to.
+//The Instantiation then creates an arbitrary host which is used to receive data itself. This information is
+//then passed to a new processorGoroutine which automatically notifies the controller that it is online
+//and waiting for commands. It then enters a command wait loop.  
+func InstantiateProcessor(controllerAddress string) ( string, *bool) {
+	StillRunning := true;
+	ProcessorAddress, inputChannel := netcode.ArbitraryHost()  
+
+	go processor(inputChannel,ProcessorAddress, &StillRunning, controllerAddress)
+	return ProcessorAddress, &StillRunning
+}
+
+
+
+//processor creates a processor given a 
+func processor(inputChannel chan string,commandAddress string, StillRunning *bool, controllerAddress string) {
 	//create and send to the controller the receiver for the
 
-	commandAddress, inputChannel := netcode.ArbitraryHost()                     //create listening channel at string commandAddress
+
 	commandAddressString := "newProcessor" + nameTextDelimiter + commandAddress //create the command that tells the controller where to send to
 	netcode.SendMessage(commandAddressString, controllerAddress)                //send to the controller at controller address the commandString
 	var commandString string                                                    //create the string that the commands are going to go into.
